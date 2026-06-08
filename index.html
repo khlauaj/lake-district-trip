@@ -17,6 +17,9 @@
   .hero { background: radial-gradient(circle at 80% 20%, rgba(255,255,255,0.12) 0%, transparent 45%), linear-gradient(135deg,#25402f 0%,#2f4f3e 45%,#4d7d5e 100%); color:#fff; padding:54px 0 46px; position:relative; overflow:hidden; }
   .hero::before { content:""; position:absolute; inset:0; background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 50 L15 30 L25 40 L40 15 L60 45 L60 60 L0 60 Z' fill='%23ffffff' opacity='0.04'/%3E%3C/svg%3E"); opacity:0.6; }
   .hero .wrap { position:relative; z-index:2; }
+  .lang-switch { position:absolute; top:0; right:20px; display:flex; gap:0; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.3); border-radius:30px; padding:3px; z-index:5; }
+  .lang-btn { background:transparent; border:none; color:#fff; font-family:'Noto Sans HK',sans-serif; font-size:13px; font-weight:700; padding:6px 16px; border-radius:24px; cursor:pointer; transition:all .18s; }
+  .lang-btn.active { background:#fff; color:var(--moss); }
   .eyebrow { font-size:13px; letter-spacing:4px; text-transform:uppercase; opacity:0.78; font-weight:700; }
   .hero h1 { font-family:'Fraunces',serif; font-weight:900; font-size:clamp(30px,5.5vw,48px); line-height:1.05; margin:12px 0 8px; }
   .hero .lead { font-size:clamp(14px,2.5vw,17px); opacity:0.92; font-weight:500; }
@@ -110,9 +113,6 @@
   .btn.ghost { background:#fff; color:var(--moss); border:1px solid var(--line); }
   .btn.ghost:hover { border-color:var(--sage); }
 
-  footer { background:var(--moss); color:rgba(255,255,255,0.8); text-align:center; padding:30px 20px; margin-top:40px; font-size:13px; }
-  footer .big { font-family:'Fraunces',serif; color:#fff; font-size:18px; margin-bottom:6px; }
-
   .stay-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:14px; }
   .stay { background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px 18px; transition:all .18s; }
   .stay:hover { border-color:var(--sage); box-shadow:0 4px 16px rgba(47,79,62,0.07); }
@@ -126,9 +126,13 @@
   .stay .s-tag { background:var(--mist); color:var(--moss-2); font-size:11.5px; padding:3px 9px; border-radius:6px; }
   .stay .s-badge { display:inline-block; background:var(--sage); color:#fff; font-size:11px; font-weight:700; padding:2px 10px; border-radius:20px; margin-bottom:8px; }
 
+  footer { background:var(--moss); color:rgba(255,255,255,0.8); text-align:center; padding:30px 20px; margin-top:40px; font-size:13px; }
+  footer .big { font-family:'Fraunces',serif; color:#fff; font-size:18px; margin-bottom:6px; }
+
   @media (max-width:560px){
     .timeline::before { left:52px; } .ti .dot { left:49px; } .ti .t { width:44px; font-size:13px;}
-    .hero { padding:42px 0 36px; } #map { height:380px; } .map-toggle { margin-left:0; width:100%; margin-top:4px;}
+    .hero { padding:60px 0 36px; } #map { height:380px; } .map-toggle { margin-left:0; width:100%; margin-top:4px;}
+    .lang-switch { top:16px; }
   }
 </style>
 </head>
@@ -136,53 +140,28 @@
 
   <header class="hero">
     <div class="wrap">
+      <div class="lang-switch">
+        <button class="lang-btn active" data-lang="zh">中文</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
       <div class="eyebrow">UK · Cumbria · The Lakes</div>
-      <h1>Lake District 行山之旅</h1>
-      <p class="lead">倫敦自駕 · 4 人 · 以 Ambleside 為大本營 · 4 個方案任揀</p>
-
-      <div class="group-label">按日數揀</div>
-      <div class="plan-switch" id="planGroup1">
-        <button class="plan-card active" data-plan="A">
-          <div class="pc-tag">Plan A · 較深度</div>
-          <div class="pc-name">4 日 3 夜</div>
-          <div class="pc-desc">行 3 條 fell:Catbells · Old Man · Loughrigg。多一日彈性。</div>
-        </button>
-        <button class="plan-card" data-plan="B">
-          <div class="pc-tag">Plan B · 較輕鬆</div>
-          <div class="pc-name">3 日 2 夜</div>
-          <div class="pc-desc">行 2 條 fell:Catbells · Loughrigg。彈性出發日。</div>
-        </button>
-      </div>
-
-      <div class="group-label">3 日 2 夜 · 按週末出發揀</div>
-      <div class="plan-switch" id="planGroup2">
-        <button class="plan-card" data-plan="C">
-          <div class="pc-tag">Plan C · 週五出發</div>
-          <div class="pc-name">Fri → Sun</div>
-          <div class="pc-desc">星期五出發、日返。避開週五下午 M6 高峰係關鍵。</div>
-        </button>
-        <button class="plan-card" data-plan="D">
-          <div class="pc-tag">Plan D · 週六出發</div>
-          <div class="pc-name">Sat → Mon</div>
-          <div class="pc-desc">星期六出發、週一返。多一晚,但週一返撞返工高峰。</div>
-        </button>
-      </div>
-
+      <h1 id="heroTitle"></h1>
+      <p class="lead" id="heroLead"></p>
+      <div class="group-label" id="groupLabel1"></div>
+      <div class="plan-switch" id="planGroup1"></div>
+      <div class="group-label" id="groupLabel2"></div>
+      <div class="plan-switch" id="planGroup2"></div>
       <div class="route-strip" id="routeStrip"></div>
     </div>
   </header>
 
   <div class="wrap">
     <div class="map-section">
-      <h3>互動行程地圖</h3>
-      <div class="map-sub">㩒下面按鈕揀每日路線,地圖會跳到對應地點 · 㩒 marker 睇詳情</div>
+      <h3 id="mapTitle"></h3>
+      <div class="map-sub" id="mapSub"></div>
       <div class="map-controls" id="mapControls"></div>
       <div id="map"></div>
-      <div class="map-legend">
-        <div class="lg"><span class="sw" style="background:#b5732a"></span> 大本營 / 住宿</div>
-        <div class="lg"><span class="sw" style="background:#2f4f3e"></span> 行山 / 景點</div>
-        <div class="lg"><span class="sw" style="background:#5a8f6b;border-radius:2px;width:18px;height:4px"></span> 當日路線</div>
-      </div>
+      <div class="map-legend" id="mapLegend"></div>
     </div>
   </div>
 
@@ -192,165 +171,236 @@
 
   <div class="wrap">
     <div id="dayPanels"></div>
-
     <div class="block">
-      <h3>出發前必讀提醒</h3>
-      <div class="tip-row"><div class="ic">1</div><div class="x"><b>住宿快訂。</b> 7 月旺季 Ambleside B&B 好搶手。The Gables Guesthouse(評分 4.8、鎮中心、免費泊車)· 電話 +44 15394 33272。4 人記得訂兩間雙人房或問有冇 family room。</div></div>
-      <div class="tip-row"><div class="ic">2</div><div class="x"><b>M6 塞車時段。</b> 最忌週五下午 1pm–7pm(放工 + 度假車流)同週日傍晚。週六北上湖區則係朝早 10am–1pm 最旺。過 Birmingham 一段可付費行 M6 Toll(約 £8)避塞。</div></div>
-      <div class="tip-row"><div class="ic">3</div><div class="x"><b>山上天氣多變。</b> 就算 7 月,山頂都可以又凍又大霧大風。防水外套 + 保暖層必備,鞋一定要 walking boots。出發前查 Met Office「Lake District Mountain Weather」專頁。</div></div>
-      <div class="tip-row"><div class="ic">4</div><div class="x"><b>停車場早到。</b> Catbells(Hawes End)、Loughrigg(White Moss)、Old Man(Walna Scar)朝早好快滿,9 點前到最穩陣。山區小路窄,唔好盲跟 Sat-Nav。</div></div>
+      <h3 id="tipsTitle"></h3>
+      <div id="tipsList"></div>
     </div>
-
     <div class="block">
-      <h3>行山 Day-pack 裝備清單</h3>
-      <div class="pack-progress" id="progress">已準備 0 / 14 項</div>
+      <h3 id="packTitle"></h3>
+      <div class="pack-progress" id="progress"></div>
       <div class="pack-grid" id="pack"></div>
     </div>
-
     <div class="block">
-      <h3>實用連結</h3>
+      <h3 id="linksTitle"></h3>
       <div class="actions" id="actions"></div>
     </div>
-
     <div class="block">
-      <h3>住宿選擇</h3>
-      <p style="color:var(--sub);font-size:14px;margin:-8px 0 18px;">行程預設用 The Gables 做大本營,以下係 Ambleside 一帶嘅其他選擇,由不同價位 / 類型俾大家揀。全部位置都方便去南北兩區行山。</p>
-      <div class="stay-grid">
-
-        <div class="stay featured">
-          <span class="s-badge">★ 行程預設</span>
-          <div class="s-top"><div class="s-name">The Gables Guesthouse</div><div class="s-rating">★ 4.8</div></div>
-          <div class="s-type">B&B · 鎮中心</div>
-          <div class="s-feat">評分最高,鎮中心位置、有免費泊車,老闆 Rohan friendly,早餐好評。適合行山友。</div>
-          <div class="s-meta"><span class="s-tag">免費泊車</span><span class="s-tag">含早餐</span><span class="s-tag">+44 15394 33272</span></div>
-        </div>
-
-        <div class="stay">
-          <div class="s-top"><div class="s-name">Brantholme B&B</div><div class="s-rating">★ 4.6</div></div>
-          <div class="s-type">B&B · 有熱水浴池</div>
-          <div class="s-feat">寧靜、有花園同 hot tub,房大、view 靚,主人 Frank & Jo 好客。離鎮中心 5 分鐘步行。</div>
-          <div class="s-meta"><span class="s-tag">免費泊車</span><span class="s-tag">Hot tub</span><span class="s-tag">+44 15394 33974</span></div>
-        </div>
-
-        <div class="stay">
-          <div class="s-top"><div class="s-name">Ambleside Townhouse</div><div class="s-rating">★ 4.6</div></div>
-          <div class="s-type">B&B / 小酒店 · 鎮中心</div>
-          <div class="s-feat">性價比高、職員親切,早餐豐富。Lake Rd 位置方便。多人住過、評價穩定(近 300 評)。</div>
-          <div class="s-meta"><span class="s-tag">抵住</span><span class="s-tag">含早餐</span><span class="s-tag">+44 15394 33240</span></div>
-        </div>
-
-        <div class="stay">
-          <div class="s-top"><div class="s-name">The Waterhead Inn</div><div class="s-rating">★ 4.4</div></div>
-          <div class="s-type">湖邊 Inn / 酒店</div>
-          <div class="s-feat">就喺 Windermere 湖邊,好多房望湖景,樓下有 pub 同餐廳,出門就係遊船碼頭。離鎮中心約 20 分鐘步行。</div>
-          <div class="s-meta"><span class="s-tag">湖景</span><span class="s-tag">餐廳 / Pub</span><span class="s-tag">+44 15394 32566</span></div>
-        </div>
-
-        <div class="stay">
-          <div class="s-top"><div class="s-name">Skelwith Bridge Hotel</div><div class="s-rating">★ 4.4</div></div>
-          <div class="s-type">鄉郊酒店 · 有特色</div>
-          <div class="s-feat">喺 Ambleside 西面約 10 分鐘車程,環境清幽、有古樸風味,dog-friendly,行 Loughrigg / Langdale 更就腳。</div>
-          <div class="s-meta"><span class="s-tag">寧靜</span><span class="s-tag">近行山起點</span><span class="s-tag">+44 15394 32115</span></div>
-        </div>
-
-        <div class="stay">
-          <div class="s-top"><div class="s-name">YHA Ambleside</div><div class="s-rating">★ 4.5</div></div>
-          <div class="s-type">青年旅舍 · 最抵</div>
-          <div class="s-feat">預算之選,湖邊位置、view 一流,有平價餐廳同酒吧。可訂私人房(雙人 / 家庭房)。設施較簡樸但乾淨。</div>
-          <div class="s-meta"><span class="s-tag">最平</span><span class="s-tag">湖景</span><span class="s-tag">私人房可訂</span></div>
-        </div>
-
-      </div>
-      <p style="color:var(--sub);font-size:12.5px;margin-top:14px;">評分來自 Google Maps,僅供參考。7 月旺季建議盡早預訂。</p>
+      <h3 id="stayTitle"></h3>
+      <p style="color:var(--sub);font-size:14px;margin:-8px 0 18px;" id="stayIntro"></p>
+      <div class="stay-grid" id="stayGrid"></div>
+      <p style="color:var(--sub);font-size:12.5px;margin-top:14px;" id="stayFoot"></p>
     </div>
   </div>
 
   <footer>
-    <div class="big">Enjoy the fells! 🥾</div>
-    行程僅供參考 · 出發前請再確認天氣、停車及住宿資訊
+    <div class="big" id="footBig"></div>
+    <span id="footSmall"></span>
   </footer>
 
 <script>
-  const BASE = { name:"The Gables Guesthouse", note:"Ambleside 大本營 · 住宿", lat:54.4305725, lng:-2.9651200, base:true, label:"住" };
+  const BASE = { lat:54.4305725, lng:-2.9651200, base:true, label:"住",
+    name:{zh:"The Gables Guesthouse", en:"The Gables Guesthouse"}, note:{zh:"Ambleside 大本營 · 住宿", en:"Ambleside base · accommodation"} };
   const SPOTS = {
-    stock:{ name:"Stock Ghyll Force", note:"瀑布熱身 · 來回約 45 分鐘", lat:54.4327476, lng:-2.9511340 },
-    catbells:{ name:"Catbells", note:"入門經典 fell · 俯瞰 Derwentwater · 來回 2.5–3 小時", lat:54.5683050, lng:-3.1706715 },
-    keswick:{ name:"Keswick / Derwentwater", note:"湖邊散步、鎮上 lunch", lat:54.5990829, lng:-3.1445426 },
-    oldman:{ name:"Old Man of Coniston", note:"進階 · 銅礦遺跡 + 高山湖 + 360°景 · 來回 4–5 小時", lat:54.3700951, lng:-3.1199181 },
-    coniston:{ name:"Coniston Water", note:"湖邊收尾、Sun Inn 飲返杯", lat:54.3500000, lng:-3.0700000 },
-    loughrigg:{ name:"Loughrigg Fell", note:"山頂望三湖 · 來回 2–2.5 小時", lat:54.4375000, lng:-3.0083611 },
-    tarn:{ name:"Tarn Hows", note:"湖邊平路一圈約 40 分鐘 · 收尾", lat:54.3833333, lng:-3.0333333 },
+    stock:{ lat:54.4327476, lng:-2.9511340, name:{zh:"Stock Ghyll Force",en:"Stock Ghyll Force"}, note:{zh:"瀑布熱身 · 來回約 45 分鐘",en:"Warm-up waterfall · ~45 min return"} },
+    catbells:{ lat:54.5683050, lng:-3.1706715, name:{zh:"Catbells",en:"Catbells"}, note:{zh:"入門經典 fell · 俯瞰 Derwentwater · 來回 2.5–3 小時",en:"Classic beginner fell · views over Derwentwater · 2.5–3 hr return"} },
+    keswick:{ lat:54.5990829, lng:-3.1445426, name:{zh:"Keswick / Derwentwater",en:"Keswick / Derwentwater"}, note:{zh:"湖邊散步、鎮上 lunch",en:"Lakeside stroll & lunch in town"} },
+    oldman:{ lat:54.3700951, lng:-3.1199181, name:{zh:"Old Man of Coniston",en:"Old Man of Coniston"}, note:{zh:"進階 · 銅礦遺跡 + 高山湖 + 360°景 · 來回 4–5 小時",en:"Advanced · old mines + tarn + 360° views · 4–5 hr return"} },
+    coniston:{ lat:54.3500000, lng:-3.0700000, name:{zh:"Coniston Water",en:"Coniston Water"}, note:{zh:"湖邊收尾、Sun Inn 飲返杯",en:"Lakeside finish, pint at Sun Inn"} },
+    loughrigg:{ lat:54.4375000, lng:-3.0083611, name:{zh:"Loughrigg Fell",en:"Loughrigg Fell"}, note:{zh:"山頂望三湖 · 來回 2–2.5 小時",en:"Three-lake summit view · 2–2.5 hr return"} },
+    tarn:{ lat:54.3833333, lng:-3.0333333, name:{zh:"Tarn Hows",en:"Tarn Hows"}, note:{zh:"湖邊平路一圈約 40 分鐘 · 收尾",en:"Easy ~40 min lakeside loop · wind-down"} },
   };
+
+  const UI = {
+    zh:{ title:"Lake District 行山之旅", lead:"倫敦自駕 · 4 人 · 以 Ambleside 為大本營 · 4 個方案任揀",
+      g1:"按日數揀", g2:"3 日 2 夜 · 按週末出發揀",
+      mapTitle:"互動行程地圖", mapSub:"㩒下面按鈕揀每日路線,地圖會跳到對應地點 · 㩒 marker 睇詳情",
+      legBase:"大本營 / 住宿", legSpot:"行山 / 景點", legRoute:"當日路線", showRoute:"顯示路線", all:"全部",
+      tipsTitle:"出發前必讀提醒", packTitle:"行山 Day-pack 裝備清單", packProg:(d,t)=>"已準備 "+d+" / "+t+" 項",
+      linksTitle:"實用連結", stayTitle:"住宿選擇",
+      stayIntro:"行程預設用 The Gables 做大本營,以下係 Ambleside 一帶嘅其他選擇,由不同價位 / 類型俾大家揀。全部位置都方便去南北兩區行山。",
+      stayFoot:"評分來自 Google Maps,僅供參考。7 月旺季建議盡早預訂。",
+      footBig:"Enjoy the fells! 🥾", footSmall:"行程僅供參考 · 出發前請再確認天氣、停車及住宿資訊",
+      btnMap:"🗺️ Google Maps 路線", btnWx:"🌦️ 山區天氣預報", btnStay:"🏠 住宿網站", btnPrint:"🖨️ 列印 / 存 PDF" },
+    en:{ title:"Lake District Hiking Trip", lead:"Self-drive from London · 4 people · based in Ambleside · 4 plans to choose",
+      g1:"By number of days", g2:"3 days / 2 nights · by weekend departure",
+      mapTitle:"Interactive itinerary map", mapSub:"Tap the buttons below to view each day's route — the map jumps to the stops · tap a marker for details",
+      legBase:"Base / accommodation", legSpot:"Hike / sight", legRoute:"Day's route", showRoute:"Show route", all:"All",
+      tipsTitle:"Read before you go", packTitle:"Hiking day-pack checklist", packProg:(d,t)=>"Packed "+d+" / "+t,
+      linksTitle:"Useful links", stayTitle:"Where to stay",
+      stayIntro:"The itinerary uses The Gables as the base. Below are other options around Ambleside across different price points and styles — all well located for hikes in both the north and south.",
+      stayFoot:"Ratings from Google Maps, for reference only. Book early for the July peak season.",
+      footBig:"Enjoy the fells! 🥾", footSmall:"Itinerary for reference only · please re-check weather, parking and accommodation before departure",
+      btnMap:"🗺️ Google Maps route", btnWx:"🌦️ Mountain weather", btnStay:"🏠 Accommodation site", btnPrint:"🖨️ Print / Save PDF" }
+  };
+
+  const PLAN_CARDS = [
+    { group:1, key:"A", tag:{zh:"Plan A · 較深度",en:"Plan A · in-depth"}, name:{zh:"4 日 3 夜",en:"4D / 3N"}, desc:{zh:"行 3 條 fell:Catbells · Old Man · Loughrigg。多一日彈性。",en:"3 fells: Catbells · Old Man · Loughrigg. One extra flexible day."} },
+    { group:1, key:"B", tag:{zh:"Plan B · 較輕鬆",en:"Plan B · lighter"}, name:{zh:"3 日 2 夜",en:"3D / 2N"}, desc:{zh:"行 2 條 fell:Catbells · Loughrigg。彈性出發日。",en:"2 fells: Catbells · Loughrigg. Flexible departure day."} },
+    { group:2, key:"C", tag:{zh:"Plan C · 週五出發",en:"Plan C · Fri start"}, name:{zh:"Fri → Sun",en:"Fri → Sun"}, desc:{zh:"星期五出發、日返。避開週五下午 M6 高峰係關鍵。",en:"Depart Fri, return Sun. Avoiding the Fri-afternoon M6 peak is key."} },
+    { group:2, key:"D", tag:{zh:"Plan D · 週六出發",en:"Plan D · Sat start"}, name:{zh:"Sat → Mon",en:"Sat → Mon"}, desc:{zh:"星期六出發、週一返。多一晚,但週一返撞返工高峰。",en:"Depart Sat, return Mon. Extra night, but Mon return hits rush hour."} },
+  ];
 
   const PLANS = {
-    A:{ label:"4 日 3 夜",
-      strip:[["DAY 1","抵達熱身"],["DAY 2","Catbells"],["DAY 3","Old Man"],["DAY 4","Loughrigg"]],
+    A:{ label:{zh:"4 日 3 夜",en:"4 Days / 3 Nights"},
+      strip:[{zh:["DAY 1","抵達熱身"],en:["DAY 1","Arrive"]},{zh:["DAY 2","Catbells"],en:["DAY 2","Catbells"]},{zh:["DAY 3","Old Man"],en:["DAY 3","Old Man"]},{zh:["DAY 4","Loughrigg"],en:["DAY 4","Loughrigg"]}],
       days:[
-        { d:1, title:"抵達 Ambleside", pills:[["drive","駕駛日"]], meta:"London → Ambleside · 約 5–6 小時車程 + 輕鬆熱身",
+        { d:1, title:{zh:"抵達 Ambleside",en:"Arrive in Ambleside"}, pills:[["drive",{zh:"駕駛日",en:"Driving day"}]], meta:{zh:"London → Ambleside · 約 5–6 小時車程 + 輕鬆熱身",en:"London → Ambleside · ~5–6 hr drive + easy warm-up"},
           stops:[{...BASE},{...SPOTS.stock,label:"1"}],
-          tl:[["08:00","London 出發","越早越避到 M1 / M6 高峰"],["12:30","午餐站","Stafford Services 或落 Lichfield"],["14:30","Tebay Services 小休","全英最靚服務站,停 15 分鐘"],["15:30","Check-in The Gables Guesthouse","放低行李"],["16:30","Stock Ghyll Force 瀑布","輕鬆熱身,來回約 45 分鐘"],["18:30","Ambleside 鎮上食晚餐","休息養精蓄銳"]] },
-        { d:2, title:"Catbells + Derwentwater", pills:[["easy","入門經典"]], meta:"湖區最經典路線 · 俯瞰 Derwentwater · 來回 2.5–3 小時",
+          tl:[["08:00",{zh:"London 出發",en:"Depart London"},{zh:"越早越避到 M1 / M6 高峰",en:"The earlier the better to dodge M1/M6 peak"}],["12:30",{zh:"午餐站",en:"Lunch stop"},{zh:"Stafford Services 或落 Lichfield",en:"Stafford Services or Lichfield"}],["14:30",{zh:"Tebay Services 小休",en:"Break at Tebay Services"},{zh:"全英最靚服務站,停 15 分鐘",en:"Best services in the UK, 15 min"}],["15:30",{zh:"Check-in The Gables Guesthouse",en:"Check in at The Gables"},{zh:"放低行李",en:"Drop off luggage"}],["16:30",{zh:"Stock Ghyll Force 瀑布",en:"Stock Ghyll Force waterfall"},{zh:"輕鬆熱身,來回約 45 分鐘",en:"Easy warm-up, ~45 min return"}],["18:30",{zh:"Ambleside 鎮上食晚餐",en:"Dinner in Ambleside"},{zh:"休息養精蓄銳",en:"Rest up"}]] },
+        { d:2, title:{zh:"Catbells + Derwentwater",en:"Catbells + Derwentwater"}, pills:[["easy",{zh:"入門經典",en:"Classic / easy"}]], meta:{zh:"湖區最經典路線 · 俯瞰 Derwentwater · 來回 2.5–3 小時",en:"The Lakes' classic route · views over Derwentwater · 2.5–3 hr return"},
           stops:[{...BASE},{...SPOTS.catbells,label:"1"},{...SPOTS.keswick,label:"2"}],
-          tl:[["08:15","早餐後開車去北邊 Keswick","約 45 分鐘"],["09:00","Hawes End 停車場泊車","早到搶位,旺季好快滿"],["09:15","行 Catbells","俯瞰 Derwentwater,有少少 scramble,來回 2.5–3 小時"],["12:30","Derwentwater 湖邊散步影相",""],["13:30","Keswick 鎮中心食 lunch","逛戶外用品店"],["16:00","返 Ambleside","暖水浴、休息、鎮上晚餐"]] },
-        { d:3, title:"Old Man of Coniston", pills:[["mod","進階 · 難度升級"]], meta:"變化最多 · 舊銅礦遺跡 + 高山小湖 + 360° 山頂景 · 來回 4–5 小時",
+          tl:[["08:15",{zh:"早餐後開車去北邊 Keswick",en:"After breakfast, drive north to Keswick"},{zh:"約 45 分鐘",en:"~45 min"}],["09:00",{zh:"Hawes End 停車場泊車",en:"Park at Hawes End"},{zh:"早到搶位,旺季好快滿",en:"Arrive early, fills up fast in season"}],["09:15",{zh:"行 Catbells",en:"Hike Catbells"},{zh:"俯瞰 Derwentwater,有少少 scramble,來回 2.5–3 小時",en:"Views over Derwentwater, light scramble, 2.5–3 hr return"}],["12:30",{zh:"Derwentwater 湖邊散步影相",en:"Lakeside walk & photos at Derwentwater"},{zh:"",en:""}],["13:30",{zh:"Keswick 鎮中心食 lunch",en:"Lunch in Keswick"},{zh:"逛戶外用品店",en:"Browse outdoor shops"}],["16:00",{zh:"返 Ambleside",en:"Back to Ambleside"},{zh:"暖水浴、休息、鎮上晚餐",en:"Hot shower, rest, dinner in town"}]] },
+        { d:3, title:{zh:"Old Man of Coniston",en:"Old Man of Coniston"}, pills:[["mod",{zh:"進階 · 難度升級",en:"Advanced · harder"}]], meta:{zh:"變化最多 · 舊銅礦遺跡 + 高山小湖 + 360° 山頂景 · 來回 4–5 小時",en:"Most varied · old copper mines + tarn + 360° summit · 4–5 hr return"},
           stops:[{...BASE},{...SPOTS.oldman,label:"1"},{...SPOTS.coniston,label:"2"}],
-          tl:[["08:30","早餐後開車去 Coniston","約 25–30 分鐘"],["09:00","Walna Scar 停車場泊車起步",""],["09:15","行 Old Man of Coniston","銅礦遺跡、高山 tarn、山頂 360° 景,來回 4–5 小時"],["14:00","落山,Coniston 村食嘢","Sun Inn 飲返杯"],["15:30","順遊 Coniston Water 湖邊",""],["17:00","返 Ambleside","約 20 分鐘"]],
-          note:"<b>彈性安排:</b> 呢條係四日入面最攰嘅一條,有 scramble 同碎石路。若當日天氣差,可同 Day 4 嘅 Loughrigg 對調;行到中途 tarn 折返都得,唔一定要登頂。" },
-        { d:4, title:"Loughrigg + 回程", pills:[["easy","輕鬆收尾"],["drive","駕駛日"]], meta:"山頂望三湖 · 順遊 Tarn Hows · Ambleside → London",
+          tl:[["08:30",{zh:"早餐後開車去 Coniston",en:"After breakfast, drive to Coniston"},{zh:"約 25–30 分鐘",en:"~25–30 min"}],["09:00",{zh:"Walna Scar 停車場泊車起步",en:"Park & start at Walna Scar"},{zh:"",en:""}],["09:15",{zh:"行 Old Man of Coniston",en:"Hike Old Man of Coniston"},{zh:"銅礦遺跡、高山 tarn、山頂 360° 景,來回 4–5 小時",en:"Mines, tarn, 360° summit, 4–5 hr return"}],["14:00",{zh:"落山,Coniston 村食嘢",en:"Descend, eat in Coniston village"},{zh:"Sun Inn 飲返杯",en:"Pint at the Sun Inn"}],["15:30",{zh:"順遊 Coniston Water 湖邊",en:"Stroll along Coniston Water"},{zh:"",en:""}],["17:00",{zh:"返 Ambleside",en:"Back to Ambleside"},{zh:"約 20 分鐘",en:"~20 min"}]],
+          note:{zh:"<b>彈性安排:</b> 呢條係四日入面最攰嘅一條,有 scramble 同碎石路。若當日天氣差,可同 Day 4 嘅 Loughrigg 對調;行到中途 tarn 折返都得,唔一定要登頂。",en:"<b>Flexible:</b> The toughest of the four days, with scrambling and scree. If the weather's bad, swap with Day 4's Loughrigg; you can also turn back at the tarn — summiting is optional."} },
+        { d:4, title:{zh:"Loughrigg + 回程",en:"Loughrigg + return"}, pills:[["easy",{zh:"輕鬆收尾",en:"Easy finish"}],["drive",{zh:"駕駛日",en:"Driving day"}]], meta:{zh:"山頂望三湖 · 順遊 Tarn Hows · Ambleside → London",en:"Three-lake summit · stop at Tarn Hows · Ambleside → London"},
           stops:[{...BASE},{...SPOTS.loughrigg,label:"1"},{...SPOTS.tarn,label:"2"}],
-          tl:[["08:30","早餐、退房、執車",""],["09:00","行 Loughrigg Fell","由 White Moss 上,山頂望 Windermere / Grasmere / Rydal Water 三湖,來回 2–2.5 小時"],["12:00","順路去 Tarn Hows","湖邊平路一圈約 40 分鐘收尾"],["13:30","接 M6 南下","Tebay Services 午餐"],["18:30","抵達 London",""]] },
+          tl:[["08:30",{zh:"早餐、退房、執車",en:"Breakfast, check out, load car"},{zh:"",en:""}],["09:00",{zh:"行 Loughrigg Fell",en:"Hike Loughrigg Fell"},{zh:"由 White Moss 上,山頂望 Windermere / Grasmere / Rydal Water 三湖,來回 2–2.5 小時",en:"From White Moss, summit views of Windermere / Grasmere / Rydal Water, 2–2.5 hr return"}],["12:00",{zh:"順路去 Tarn Hows",en:"Stop at Tarn Hows"},{zh:"湖邊平路一圈約 40 分鐘收尾",en:"Easy ~40 min lakeside loop to finish"}],["13:30",{zh:"接 M6 南下",en:"Join M6 southbound"},{zh:"Tebay Services 午餐",en:"Lunch at Tebay Services"}],["18:30",{zh:"抵達 London",en:"Arrive London"},{zh:"",en:""}]] },
       ] },
-    B:{ label:"3 日 2 夜",
-      strip:[["DAY 1","抵達 + Catbells"],["DAY 2","Coniston / 彈性"],["DAY 3","Loughrigg + 回程"]],
+    B:{ label:{zh:"3 日 2 夜",en:"3 Days / 2 Nights"},
+      strip:[{zh:["DAY 1","抵達 + Catbells"],en:["DAY 1","Arrive + Catbells"]},{zh:["DAY 2","Coniston / 彈性"],en:["DAY 2","Coniston / flex"]},{zh:["DAY 3","Loughrigg + 回程"],en:["DAY 3","Loughrigg + return"]}],
       days:[
-        { d:1, title:"抵達 + Catbells", pills:[["drive","駕駛日"],["easy","經典"]], meta:"London → Ambleside · 落車後直上最經典 Catbells",
+        { d:1, title:{zh:"抵達 + Catbells",en:"Arrive + Catbells"}, pills:[["drive",{zh:"駕駛日",en:"Driving day"}],["easy",{zh:"經典",en:"Classic"}]], meta:{zh:"London → Ambleside · 落車後直上最經典 Catbells",en:"London → Ambleside · straight to the classic Catbells on arrival"},
           stops:[{...BASE},{...SPOTS.catbells,label:"1"},{...SPOTS.keswick,label:"2"}],
-          tl:[["07:30","London 出發","早走避開高峰,爭取時間"],["12:30","Tebay Services 午餐 + 小休",""],["13:30","直接去 Hawes End 停車場","唔入 Ambleside 住宿先,慳時間"],["14:00","行 Catbells","湖區最經典,俯瞰 Derwentwater,來回 2.5–3 小時"],["17:00","Check-in The Gables Guesthouse","放低行李、休息"],["18:30","Ambleside 鎮上食晚餐",""]] },
-        { d:2, title:"Coniston / 彈性日", pills:[["mod","可選難度"]], meta:"行 Old Man of Coniston,或留作觀光 / 避雨彈性日",
+          tl:[["07:30",{zh:"London 出發",en:"Depart London"},{zh:"早走避開高峰,爭取時間",en:"Leave early to beat peak & save time"}],["12:30",{zh:"Tebay Services 午餐 + 小休",en:"Lunch & break at Tebay"},{zh:"",en:""}],["13:30",{zh:"直接去 Hawes End 停車場",en:"Go straight to Hawes End car park"},{zh:"唔入 Ambleside 住宿先,慳時間",en:"Skip check-in first to save time"}],["14:00",{zh:"行 Catbells",en:"Hike Catbells"},{zh:"湖區最經典,俯瞰 Derwentwater,來回 2.5–3 小時",en:"The Lakes' classic, views over Derwentwater, 2.5–3 hr return"}],["17:00",{zh:"Check-in The Gables Guesthouse",en:"Check in at The Gables"},{zh:"放低行李、休息",en:"Drop bags, rest"}],["18:30",{zh:"Ambleside 鎮上食晚餐",en:"Dinner in Ambleside"},{zh:"",en:""}]] },
+        { d:2, title:{zh:"Coniston / 彈性日",en:"Coniston / flex day"}, pills:[["mod",{zh:"可選難度",en:"Optional difficulty"}]], meta:{zh:"行 Old Man of Coniston,或留作觀光 / 避雨彈性日",en:"Hike Old Man of Coniston, or keep as a sightseeing / rain buffer day"},
           stops:[{...BASE},{...SPOTS.oldman,label:"1"},{...SPOTS.coniston,label:"2"}],
-          tl:[["08:30","早餐後開車去 Coniston","約 25–30 分鐘"],["09:00","Walna Scar 停車場泊車起步",""],["09:15","行 Old Man of Coniston","銅礦遺跡、高山 tarn、360° 景,來回 4–5 小時"],["14:00","Coniston 村食嘢、湖邊散步","Sun Inn 飲返杯"],["17:00","返 Ambleside","約 20 分鐘"]],
-          note:"<b>彈性日:</b> 若天氣差或想輕鬆啲,可改去 Windermere 坐船、Grasmere 逛鎮、或行平緩嘅 Tarn Hows 代替。" },
-        { d:3, title:"Loughrigg + 回程", pills:[["easy","輕鬆收尾"],["drive","駕駛日"]], meta:"山頂望三湖 · 順遊 Tarn Hows · Ambleside → London",
+          tl:[["08:30",{zh:"早餐後開車去 Coniston",en:"After breakfast, drive to Coniston"},{zh:"約 25–30 分鐘",en:"~25–30 min"}],["09:00",{zh:"Walna Scar 停車場泊車起步",en:"Park & start at Walna Scar"},{zh:"",en:""}],["09:15",{zh:"行 Old Man of Coniston",en:"Hike Old Man of Coniston"},{zh:"銅礦遺跡、高山 tarn、360° 景,來回 4–5 小時",en:"Mines, tarn, 360° views, 4–5 hr return"}],["14:00",{zh:"Coniston 村食嘢、湖邊散步",en:"Eat in Coniston, lakeside stroll"},{zh:"Sun Inn 飲返杯",en:"Pint at the Sun Inn"}],["17:00",{zh:"返 Ambleside",en:"Back to Ambleside"},{zh:"約 20 分鐘",en:"~20 min"}]],
+          note:{zh:"<b>彈性日:</b> 若天氣差或想輕鬆啲,可改去 Windermere 坐船、Grasmere 逛鎮、或行平緩嘅 Tarn Hows 代替。",en:"<b>Flex day:</b> If the weather's bad or you want it easy, swap for a Windermere cruise, a wander around Grasmere, or the gentle Tarn Hows loop."} },
+        { d:3, title:{zh:"Loughrigg + 回程",en:"Loughrigg + return"}, pills:[["easy",{zh:"輕鬆收尾",en:"Easy finish"}],["drive",{zh:"駕駛日",en:"Driving day"}]], meta:{zh:"山頂望三湖 · 順遊 Tarn Hows · Ambleside → London",en:"Three-lake summit · stop at Tarn Hows · Ambleside → London"},
           stops:[{...BASE},{...SPOTS.loughrigg,label:"1"},{...SPOTS.tarn,label:"2"}],
-          tl:[["08:30","早餐、退房、執車",""],["09:00","行 Loughrigg Fell","由 White Moss 上,山頂望三湖,來回 2–2.5 小時"],["12:00","順路去 Tarn Hows","湖邊平路一圈約 40 分鐘收尾"],["13:30","接 M6 南下","Tebay Services 午餐"],["18:30","抵達 London",""]] },
+          tl:[["08:30",{zh:"早餐、退房、執車",en:"Breakfast, check out, load car"},{zh:"",en:""}],["09:00",{zh:"行 Loughrigg Fell",en:"Hike Loughrigg Fell"},{zh:"由 White Moss 上,山頂望三湖,來回 2–2.5 小時",en:"From White Moss, three-lake summit, 2–2.5 hr return"}],["12:00",{zh:"順路去 Tarn Hows",en:"Stop at Tarn Hows"},{zh:"湖邊平路一圈約 40 分鐘收尾",en:"Easy ~40 min lakeside loop"}],["13:30",{zh:"接 M6 南下",en:"Join M6 southbound"},{zh:"Tebay Services 午餐",en:"Lunch at Tebay"}],["18:30",{zh:"抵達 London",en:"Arrive London"},{zh:"",en:""}]] },
       ] },
-    C:{ label:"3 日 2 夜 · Fri → Sun",
-      strip:[["FRI","抵達 + Catbells"],["SAT","Old Man"],["SUN","Loughrigg + 回程"]],
+    C:{ label:{zh:"3 日 2 夜 · Fri → Sun",en:"3D / 2N · Fri → Sun"},
+      strip:[{zh:["FRI","抵達 + Catbells"],en:["FRI","Arrive + Catbells"]},{zh:["SAT","Old Man"],en:["SAT","Old Man"]},{zh:["SUN","Loughrigg + 回程"],en:["SUN","Loughrigg + return"]}],
       days:[
-        { d:1, title:"星期五 · 抵達 + Catbells", pills:[["drive","駕駛日"],["easy","經典"]], meta:"週五出發 · 重點係避開 M6 下午高峰",
+        { d:1, title:{zh:"星期五 · 抵達 + Catbells",en:"Friday · Arrive + Catbells"}, pills:[["drive",{zh:"駕駛日",en:"Driving day"}]], meta:{zh:"週五出發 · 重點係避開 M6 下午高峰",en:"Friday departure · key is dodging the M6 afternoon peak"},
           stops:[{...BASE},{...SPOTS.catbells,label:"1"},{...SPOTS.keswick,label:"2"}],
-          tl:[["06:30","London 早走(關鍵!)","週五下午 1–7pm M6 最塞,務必朝早走"],["11:30","Tebay Services 午餐","趕喺中午前過 Birmingham"],["13:00","直接去 Hawes End 停車場","唔先 check-in,慳時間"],["13:30","行 Catbells","俯瞰 Derwentwater,來回 2.5–3 小時"],["17:00","Check-in The Gables Guesthouse","放低行李、休息"],["18:30","Ambleside 鎮上食晚餐",""]],
-          note:"<b>週五重點:</b> M6 喺週五下午 1–7pm 係 leisure travel 高峰,過 Birmingham 一段尤其慢。最穩陣係 6:30am 前走;如果走唔到咁早,寧願拖到夜晚 8pm 後先出發,週六朝早再行 Catbells。" },
-        { d:2, title:"星期六 · Old Man of Coniston", pills:[["mod","進階"]], meta:"全日精華 · 行湖區經典 Old Man",
+          tl:[["06:30",{zh:"London 早走(關鍵!)",en:"Leave London early (key!)"},{zh:"週五下午 1–7pm M6 最塞,務必朝早走",en:"M6 worst Fri 1–7pm, leave in the morning"}],["11:30",{zh:"Tebay Services 午餐",en:"Lunch at Tebay"},{zh:"趕喺中午前過 Birmingham",en:"Aim to pass Birmingham before noon"}],["13:00",{zh:"直接去 Hawes End 停車場",en:"Go straight to Hawes End car park"},{zh:"唔先 check-in,慳時間",en:"Skip check-in to save time"}],["13:30",{zh:"行 Catbells",en:"Hike Catbells"},{zh:"俯瞰 Derwentwater,來回 2.5–3 小時",en:"Views over Derwentwater, 2.5–3 hr return"}],["17:00",{zh:"Check-in The Gables Guesthouse",en:"Check in at The Gables"},{zh:"放低行李、休息",en:"Drop bags, rest"}],["18:30",{zh:"Ambleside 鎮上食晚餐",en:"Dinner in Ambleside"},{zh:"",en:""}]],
+          note:{zh:"<b>週五重點:</b> M6 喺週五下午 1–7pm 係 leisure travel 高峰,過 Birmingham 一段尤其慢。最穩陣係 6:30am 前走;如果走唔到咁早,寧願拖到夜晚 8pm 後先出發,週六朝早再行 Catbells。",en:"<b>Friday tip:</b> The M6 peaks for leisure travel Fri 1–7pm, especially around Birmingham. Safest to leave before 6:30am; if you can't, better to depart after 8pm and do Catbells on Saturday morning instead."} },
+        { d:2, title:{zh:"星期六 · Old Man of Coniston",en:"Saturday · Old Man of Coniston"}, pills:[["mod",{zh:"進階",en:"Advanced"}]], meta:{zh:"全日精華 · 行湖區經典 Old Man",en:"Full highlight day · the classic Old Man"},
           stops:[{...BASE},{...SPOTS.oldman,label:"1"},{...SPOTS.coniston,label:"2"}],
-          tl:[["08:30","早餐後開車去 Coniston","約 25–30 分鐘"],["09:00","Walna Scar 停車場泊車起步","週末早到搶位"],["09:15","行 Old Man of Coniston","銅礦遺跡、高山 tarn、360° 景,來回 4–5 小時"],["14:00","Coniston 村食嘢、湖邊散步","Sun Inn 飲返杯"],["17:00","返 Ambleside","約 20 分鐘"]],
-          note:"<b>彈性:</b> 若天氣差,可改去 Windermere 坐船、Grasmere 逛鎮,或行平緩 Tarn Hows。" },
-        { d:3, title:"星期日 · Loughrigg + 回程", pills:[["easy","輕鬆收尾"],["drive","駕駛日"]], meta:"早行早返 · 避開週日傍晚 M6 南返高峰",
+          tl:[["08:30",{zh:"早餐後開車去 Coniston",en:"After breakfast, drive to Coniston"},{zh:"約 25–30 分鐘",en:"~25–30 min"}],["09:00",{zh:"Walna Scar 停車場泊車起步",en:"Park & start at Walna Scar"},{zh:"週末早到搶位",en:"Arrive early on weekends"}],["09:15",{zh:"行 Old Man of Coniston",en:"Hike Old Man of Coniston"},{zh:"銅礦遺跡、高山 tarn、360° 景,來回 4–5 小時",en:"Mines, tarn, 360° views, 4–5 hr return"}],["14:00",{zh:"Coniston 村食嘢",en:"Eat in Coniston village"},{zh:"",en:""}],["17:00",{zh:"返 Ambleside",en:"Back to Ambleside"},{zh:"",en:""}]],
+          note:{zh:"<b>彈性:</b> 若天氣差,可改去 Windermere 坐船、Grasmere 逛鎮,或行平緩 Tarn Hows。",en:"<b>Flexible:</b> If the weather's bad, swap for a Windermere cruise, Grasmere, or the gentle Tarn Hows."} },
+        { d:3, title:{zh:"星期日 · Loughrigg + 回程",en:"Sunday · Loughrigg + return"}, pills:[["easy",{zh:"輕鬆收尾",en:"Easy finish"}],["drive",{zh:"駕駛日",en:"Driving day"}]], meta:{zh:"早行早返 · 避開週日傍晚 M6 南返高峰",en:"Hike early, leave early · avoid the Sunday-evening M6 southbound peak"},
           stops:[{...BASE},{...SPOTS.loughrigg,label:"1"},{...SPOTS.tarn,label:"2"}],
-          tl:[["08:00","早餐、退房、執車",""],["08:30","行 Loughrigg Fell","由 White Moss 上,山頂望三湖,來回 2–2.5 小時"],["11:30","順遊 Tarn Hows","湖邊平路一圈約 40 分鐘"],["12:30","早少少接 M6 南下(關鍵!)","週日 1–3pm M6 南返開始塞,早走避高峰"],["13:30","Tebay Services 午餐",""],["18:00","抵達 London","早走可早到"]],
-          note:"<b>週日重點:</b> 週日下午 1–3pm 係度假車流南返高峰。建議中午前就上 M6,或者一係玩夜啲、晚上 8pm 後先走。" },
+          tl:[["08:00",{zh:"早餐、退房、執車",en:"Breakfast, check out, load car"},{zh:"",en:""}],["08:30",{zh:"行 Loughrigg Fell",en:"Hike Loughrigg Fell"},{zh:"由 White Moss 上,山頂望三湖,來回 2–2.5 小時",en:"From White Moss, three-lake summit, 2–2.5 hr return"}],["11:30",{zh:"順遊 Tarn Hows",en:"Stop at Tarn Hows"},{zh:"湖邊平路一圈約 40 分鐘",en:"Easy ~40 min lakeside loop"}],["12:30",{zh:"早少少接 M6 南下(關鍵!)",en:"Join M6 south a bit early (key!)"},{zh:"週日 1–3pm M6 南返開始塞,早走避高峰",en:"M6 south builds Sun 1–3pm, leave early"}],["18:00",{zh:"抵達 London",en:"Arrive London"},{zh:"早走可早到",en:"Leaving early gets you back sooner"}]],
+          note:{zh:"<b>週日重點:</b> 週日下午 1–3pm 係度假車流南返高峰。建議中午前就上 M6,或者一係玩夜啲、晚上 8pm 後先走。",en:"<b>Sunday tip:</b> Sun 1–3pm is the peak for holiday traffic heading south. Best to be on the M6 before noon, or alternatively leave late after 8pm."} },
       ] },
-    D:{ label:"3 日 2 夜 · Sat → Mon",
-      strip:[["SAT","抵達 + Catbells"],["SUN","Old Man"],["MON","Loughrigg + 回程"]],
+    D:{ label:{zh:"3 日 2 夜 · Sat → Mon",en:"3D / 2N · Sat → Mon"},
+      strip:[{zh:["SAT","抵達 + Catbells"],en:["SAT","Arrive + Catbells"]},{zh:["SUN","Old Man"],en:["SUN","Old Man"]},{zh:["MON","Loughrigg + 回程"],en:["MON","Loughrigg + return"]}],
       days:[
-        { d:1, title:"星期六 · 抵達 + Catbells", pills:[["drive","駕駛日"],["easy","經典"]], meta:"週六出發 · 朝早北上路況最好",
+        { d:1, title:{zh:"星期六 · 抵達 + Catbells",en:"Saturday · Arrive + Catbells"}, pills:[["drive",{zh:"駕駛日",en:"Driving day"}]], meta:{zh:"週六出發 · 朝早北上路況最好",en:"Saturday departure · roads best early morning"},
           stops:[{...BASE},{...SPOTS.catbells,label:"1"},{...SPOTS.keswick,label:"2"}],
-          tl:[["07:00","London 早走","週六北上湖區車流 10am–1pm 最旺,趕喺前面走"],["12:00","Tebay Services 午餐",""],["13:00","直接去 Hawes End 停車場","唔先 check-in,慳時間"],["13:30","行 Catbells","俯瞰 Derwentwater,來回 2.5–3 小時"],["17:00","Check-in The Gables Guesthouse","放低行李、休息"],["18:30","Ambleside 鎮上食晚餐",""]],
-          note:"<b>週六重點:</b> 週六朝早北上湖區 / 蘇格蘭嘅車流喺 10am–1pm 最高峰。7am 前出發可以行喺車潮前面,過 Birmingham 都順暢啲。" },
-        { d:2, title:"星期日 · Old Man of Coniston", pills:[["mod","進階"]], meta:"全日精華 · 行湖區經典 Old Man",
+          tl:[["07:00",{zh:"London 早走",en:"Leave London early"},{zh:"週六北上湖區車流 10am–1pm 最旺,趕喺前面走",en:"Northbound peaks 10am–1pm Sat, get ahead of it"}],["12:00",{zh:"Tebay Services 午餐",en:"Lunch at Tebay"},{zh:"",en:""}],["13:00",{zh:"直接去 Hawes End 停車場",en:"Go straight to Hawes End car park"},{zh:"唔先 check-in,慳時間",en:"Skip check-in to save time"}],["13:30",{zh:"行 Catbells",en:"Hike Catbells"},{zh:"俯瞰 Derwentwater,來回 2.5–3 小時",en:"Views over Derwentwater, 2.5–3 hr return"}],["17:00",{zh:"Check-in The Gables Guesthouse",en:"Check in at The Gables"},{zh:"放低行李、休息",en:"Drop bags, rest"}],["18:30",{zh:"Ambleside 鎮上食晚餐",en:"Dinner in Ambleside"},{zh:"",en:""}]],
+          note:{zh:"<b>週六重點:</b> 週六朝早北上湖區 / 蘇格蘭嘅車流喺 10am–1pm 最高峰。7am 前出發可以行喺車潮前面,過 Birmingham 都順暢啲。",en:"<b>Saturday tip:</b> Northbound traffic to the Lakes/Scotland peaks 10am–1pm on Saturdays. Leaving before 7am keeps you ahead of it and smooths the Birmingham stretch."} },
+        { d:2, title:{zh:"星期日 · Old Man of Coniston",en:"Sunday · Old Man of Coniston"}, pills:[["mod",{zh:"進階",en:"Advanced"}]], meta:{zh:"全日精華 · 行湖區經典 Old Man",en:"Full highlight day · the classic Old Man"},
           stops:[{...BASE},{...SPOTS.oldman,label:"1"},{...SPOTS.coniston,label:"2"}],
-          tl:[["08:30","早餐後開車去 Coniston","約 25–30 分鐘"],["09:00","Walna Scar 停車場泊車起步","週末早到搶位"],["09:15","行 Old Man of Coniston","銅礦遺跡、高山 tarn、360° 景,來回 4–5 小時"],["14:00","Coniston 村食嘢、湖邊散步","Sun Inn 飲返杯"],["17:00","返 Ambleside","約 20 分鐘"]],
-          note:"<b>彈性:</b> 若天氣差,可改去 Windermere 坐船、Grasmere 逛鎮,或行平緩 Tarn Hows。" },
-        { d:3, title:"星期一 · Loughrigg + 回程", pills:[["easy","輕鬆收尾"],["drive","駕駛日"]], meta:"週一返 · 避開傍晚返工 + 入城高峰",
+          tl:[["08:30",{zh:"早餐後開車去 Coniston",en:"After breakfast, drive to Coniston"},{zh:"約 25–30 分鐘",en:"~25–30 min"}],["09:00",{zh:"Walna Scar 停車場泊車起步",en:"Park & start at Walna Scar"},{zh:"週末早到搶位",en:"Arrive early on weekends"}],["09:15",{zh:"行 Old Man of Coniston",en:"Hike Old Man of Coniston"},{zh:"銅礦遺跡、高山 tarn、360° 景,來回 4–5 小時",en:"Mines, tarn, 360° views, 4–5 hr return"}],["14:00",{zh:"Coniston 村食嘢、湖邊散步",en:"Eat in Coniston, lakeside stroll"},{zh:"",en:""}],["17:00",{zh:"返 Ambleside",en:"Back to Ambleside"},{zh:"",en:""}]],
+          note:{zh:"<b>彈性:</b> 若天氣差,可改去 Windermere 坐船、Grasmere 逛鎮,或行平緩 Tarn Hows。",en:"<b>Flexible:</b> If the weather's bad, swap for a Windermere cruise, Grasmere, or the gentle Tarn Hows."} },
+        { d:3, title:{zh:"星期一 · Loughrigg + 回程",en:"Monday · Loughrigg + return"}, pills:[["easy",{zh:"輕鬆收尾",en:"Easy finish"}],["drive",{zh:"駕駛日",en:"Driving day"}]], meta:{zh:"週一返 · 避開傍晚返工 + 入城高峰",en:"Monday return · avoid the evening commute & city peak"},
           stops:[{...BASE},{...SPOTS.loughrigg,label:"1"},{...SPOTS.tarn,label:"2"}],
-          tl:[["08:30","早餐、退房、執車",""],["09:00","行 Loughrigg Fell","由 White Moss 上,山頂望三湖,來回 2–2.5 小時"],["12:00","順遊 Tarn Hows","湖邊平路一圈約 40 分鐘"],["13:00","接 M6 南下","週一日間南返反而較順"],["14:00","Tebay Services 午餐",""],["18:30","抵達 London","盡量避開傍晚入 M25 高峰"]],
-          note:"<b>週一重點:</b> 週一日間 M6 南返其實比週日順,但要留意傍晚返到 London 撞正 M25 / 入城返工高峰(4–6pm)。可以早少少走,或喺路上食晚餐避一避。記得當日要請假!" },
+          tl:[["08:30",{zh:"早餐、退房、執車",en:"Breakfast, check out, load car"},{zh:"",en:""}],["09:00",{zh:"行 Loughrigg Fell",en:"Hike Loughrigg Fell"},{zh:"由 White Moss 上,山頂望三湖,來回 2–2.5 小時",en:"From White Moss, three-lake summit, 2–2.5 hr return"}],["12:00",{zh:"順遊 Tarn Hows",en:"Stop at Tarn Hows"},{zh:"湖邊平路一圈約 40 分鐘",en:"Easy ~40 min lakeside loop"}],["13:00",{zh:"接 M6 南下",en:"Join M6 southbound"},{zh:"週一日間南返反而較順",en:"Mon daytime southbound is smoother"}],["18:30",{zh:"抵達 London",en:"Arrive London"},{zh:"盡量避開傍晚入 M25 高峰",en:"Try to avoid the evening M25 peak"}]],
+          note:{zh:"<b>週一重點:</b> 週一日間 M6 南返其實比週日順,但要留意傍晚返到 London 撞正 M25 / 入城返工高峰(4–6pm)。可以早少少走,或喺路上食晚餐避一避。記得當日要請假!",en:"<b>Monday tip:</b> The M6 southbound is actually smoother on Monday daytime than Sunday, but watch the M25 / city commute peak (4–6pm) as you reach London. Leave a bit early or have dinner en route. Remember to book the day off!"} },
       ] },
   };
 
-  let currentPlan = "A";
-  let currentDay = "all";
-  let showRoute = true;
+  const PACK = [
+    {zh:"防水外套(每人)",en:"Waterproof jacket (each)"},{zh:"保暖中層 / 抓毛",en:"Insulating mid-layer / fleece"},{zh:"Walking boots",en:"Walking boots"},{zh:"行山襪(備用)",en:"Hiking socks (spare)"},{zh:"背包 20–30L",en:"Daypack 20–30L"},{zh:"飲用水 1.5–2L",en:"Water 1.5–2L"},{zh:"行動糧 / 能量棒",en:"Trail snacks / energy bars"},{zh:"防曬 + 太陽眼鏡",en:"Sunscreen + sunglasses"},{zh:"帽 / 頸巾",en:"Hat / buff"},{zh:"離線地圖 (OS Maps)",en:"Offline map (OS Maps)"},{zh:"充電器 / 尿袋",en:"Charger / power bank"},{zh:"小型急救包",en:"Small first-aid kit"},{zh:"頭燈(後備)",en:"Headtorch (backup)"},{zh:"現金(細店 / 停車)",en:"Cash (small shops / parking)"},
+  ];
+
+  const TIPS = [
+    {zh:["住宿快訂。","7 月旺季 Ambleside B&B 好搶手。The Gables Guesthouse(評分 4.8、鎮中心、免費泊車)· 電話 +44 15394 33272。4 人記得訂兩間雙人房或問有冇 family room。"],
+     en:["Book early.","Ambleside B&Bs go fast in the July peak. The Gables Guesthouse (4.8, town centre, free parking) · +44 15394 33272. For 4 people book two doubles or ask about a family room."]},
+    {zh:["M6 塞車時段。","最忌週五下午 1pm–7pm(放工 + 度假車流)同週日傍晚。週六北上湖區則係朝早 10am–1pm 最旺。過 Birmingham 一段可付費行 M6 Toll(約 £8)避塞。"],
+     en:["M6 traffic windows.","Worst Fri 1–7pm (commute + leisure) and Sunday evening. Northbound on Saturdays peaks 10am–1pm. The M6 Toll (~£8) skips the Birmingham crunch."]},
+    {zh:["山上天氣多變。","就算 7 月,山頂都可以又凍又大霧大風。防水外套 + 保暖層必備,鞋一定要 walking boots。出發前查 Met Office「Lake District Mountain Weather」專頁。"],
+     en:["Mountain weather changes fast.","Even in July, summits can be cold, foggy and windy. Waterproof + warm layer essential; wear proper walking boots. Check the Met Office 'Lake District Mountain Weather' page before you go."]},
+    {zh:["停車場早到。","Catbells(Hawes End)、Loughrigg(White Moss)、Old Man(Walna Scar)朝早好快滿,9 點前到最穩陣。山區小路窄,唔好盲跟 Sat-Nav。"],
+     en:["Arrive early for parking.","Hawes End (Catbells), White Moss (Loughrigg) and Walna Scar (Old Man) fill up fast — aim to arrive before 9am. Lanes are narrow; don't blindly follow sat-nav."]},
+  ];
+
+  const STAYS = [
+    { featured:true, rating:"4.8", name:"The Gables Guesthouse", badge:{zh:"★ 行程預設",en:"★ Itinerary default"}, type:{zh:"B&B · 鎮中心",en:"B&B · town centre"}, feat:{zh:"評分最高,鎮中心位置、有免費泊車,老闆 Rohan friendly,早餐好評。適合行山友。",en:"Top-rated, central, free parking, friendly host Rohan, great breakfast. Ideal for hikers."}, tags:[{zh:"免費泊車",en:"Free parking"},{zh:"含早餐",en:"Breakfast incl."},{zh:"+44 15394 33272",en:"+44 15394 33272"}] },
+    { rating:"4.6", name:"Brantholme B&B", type:{zh:"B&B · 有熱水浴池",en:"B&B · hot tub"}, feat:{zh:"寧靜、有花園同 hot tub,房大、view 靚,主人 Frank & Jo 好客。離鎮中心 5 分鐘步行。",en:"Quiet, garden & hot tub, spacious rooms, lovely views, welcoming hosts Frank & Jo. 5-min walk to town."}, tags:[{zh:"免費泊車",en:"Free parking"},{zh:"Hot tub",en:"Hot tub"},{zh:"+44 15394 33974",en:"+44 15394 33974"}] },
+    { rating:"4.6", name:"Ambleside Townhouse", type:{zh:"B&B / 小酒店 · 鎮中心",en:"B&B / small hotel · central"}, feat:{zh:"性價比高、職員親切,早餐豐富。Lake Rd 位置方便。多人住過、評價穩定(近 300 評)。",en:"Great value, friendly staff, generous breakfast. Handy Lake Rd location, consistently reviewed (~300 reviews)."}, tags:[{zh:"抵住",en:"Good value"},{zh:"含早餐",en:"Breakfast incl."},{zh:"+44 15394 33240",en:"+44 15394 33240"}] },
+    { rating:"4.4", name:"The Waterhead Inn", type:{zh:"湖邊 Inn / 酒店",en:"Lakeside inn / hotel"}, feat:{zh:"就喺 Windermere 湖邊,好多房望湖景,樓下有 pub 同餐廳,出門就係遊船碼頭。離鎮中心約 20 分鐘步行。",en:"Right on Windermere, many lake-view rooms, pub & restaurant downstairs, cruise jetty across the road. ~20-min walk to town."}, tags:[{zh:"湖景",en:"Lake view"},{zh:"餐廳 / Pub",en:"Restaurant / pub"},{zh:"+44 15394 32566",en:"+44 15394 32566"}] },
+    { rating:"4.4", name:"Skelwith Bridge Hotel", type:{zh:"鄉郊酒店 · 有特色",en:"Country hotel · characterful"}, feat:{zh:"喺 Ambleside 西面約 10 分鐘車程,環境清幽、有古樸風味,dog-friendly,行 Loughrigg / Langdale 更就腳。",en:"~10-min drive west of Ambleside, peaceful and full of character, dog-friendly, handy for Loughrigg / Langdale."}, tags:[{zh:"寧靜",en:"Peaceful"},{zh:"近行山起點",en:"Near trailheads"},{zh:"+44 15394 32115",en:"+44 15394 32115"}] },
+    { rating:"4.5", name:"YHA Ambleside", type:{zh:"青年旅舍 · 最抵",en:"Hostel · cheapest"}, feat:{zh:"預算之選,湖邊位置、view 一流,有平價餐廳同酒吧。可訂私人房(雙人 / 家庭房)。設施較簡樸但乾淨。",en:"Budget pick, lakeside with great views, affordable cafe & bar. Private rooms available (double / family). Basic but clean."}, tags:[{zh:"最平",en:"Cheapest"},{zh:"湖景",en:"Lake view"},{zh:"私人房可訂",en:"Private rooms"}] },
+  ];
+
+  let currentPlan = "A", currentDay = "all", showRoute = true, lang = "zh";
+
+  function renderStatic(){
+    const t = UI[lang];
+    document.getElementById('heroTitle').textContent = t.title;
+    document.getElementById('heroLead').textContent = t.lead;
+    document.getElementById('groupLabel1').textContent = t.g1;
+    document.getElementById('groupLabel2').textContent = t.g2;
+    document.getElementById('mapTitle').textContent = t.mapTitle;
+    document.getElementById('mapSub').textContent = t.mapSub;
+    document.getElementById('tipsTitle').textContent = t.tipsTitle;
+    document.getElementById('packTitle').textContent = t.packTitle;
+    document.getElementById('linksTitle').textContent = t.linksTitle;
+    document.getElementById('stayTitle').textContent = t.stayTitle;
+    document.getElementById('stayIntro').textContent = t.stayIntro;
+    document.getElementById('stayFoot').textContent = t.stayFoot;
+    document.getElementById('footBig').textContent = t.footBig;
+    document.getElementById('footSmall').textContent = t.footSmall;
+    document.documentElement.lang = (lang === 'zh' ? 'zh-HK' : 'en');
+
+    document.getElementById('mapLegend').innerHTML =
+      '<div class="lg"><span class="sw" style="background:#b5732a"></span> '+t.legBase+'</div>'+
+      '<div class="lg"><span class="sw" style="background:#2f4f3e"></span> '+t.legSpot+'</div>'+
+      '<div class="lg"><span class="sw" style="background:#5a8f6b;border-radius:2px;width:18px;height:4px"></span> '+t.legRoute+'</div>';
+
+    [1,2].forEach(g => {
+      document.getElementById('planGroup'+g).innerHTML = PLAN_CARDS.filter(c=>c.group===g).map(c =>
+        '<button class="plan-card'+(c.key===currentPlan?' active':'')+'" data-plan="'+c.key+'">'+
+        '<div class="pc-tag">'+c.tag[lang]+'</div><div class="pc-name">'+c.name[lang]+'</div><div class="pc-desc">'+c.desc[lang]+'</div></button>').join('');
+    });
+
+    document.getElementById('tipsList').innerHTML = TIPS.map((tip,i) =>
+      '<div class="tip-row"><div class="ic">'+(i+1)+'</div><div class="x"><b>'+tip[lang][0]+'</b> '+tip[lang][1]+'</div></div>').join('');
+
+    renderPack();
+
+    document.getElementById('actions').innerHTML =
+      '<a class="btn primary" href="https://www.google.com/maps/dir/Ambleside/Catbells/Old+Man+of+Coniston/Loughrigg+Fell" target="_blank">'+t.btnMap+'</a>'+
+      '<a class="btn ghost" href="https://www.metoffice.gov.uk/weather/specialist-forecasts/mountain/lake-district" target="_blank">'+t.btnWx+'</a>'+
+      '<a class="btn ghost" href="http://www.thegables-ambleside.co.uk/" target="_blank">'+t.btnStay+'</a>'+
+      '<button class="btn ghost" onclick="window.print()">'+t.btnPrint+'</button>';
+
+    document.getElementById('stayGrid').innerHTML = STAYS.map(s => {
+      const badge = s.featured ? '<span class="s-badge">'+s.badge[lang]+'</span>' : '';
+      const tags = s.tags.map(tg => '<span class="s-tag">'+tg[lang]+'</span>').join('');
+      return '<div class="stay'+(s.featured?' featured':'')+'">'+badge+'<div class="s-top"><div class="s-name">'+s.name+'</div><div class="s-rating">★ '+s.rating+'</div></div><div class="s-type">'+s.type[lang]+'</div><div class="s-feat">'+s.feat[lang]+'</div><div class="s-meta">'+tags+'</div></div>';
+    }).join('');
+  }
+
+  function renderPack(){
+    const pack = document.getElementById('pack');
+    const doneSet = new Set([...document.querySelectorAll('.pk.done')].map(e=>e.dataset.idx));
+    pack.innerHTML = '';
+    PACK.forEach((label,idx) => {
+      const isDone = doneSet.has(String(idx));
+      const el = document.createElement('div');
+      el.className = 'pk'+(isDone?' done':''); el.dataset.idx = idx;
+      el.innerHTML = '<div class="box" style="color:'+(isDone?'#fff':'transparent')+'">✓</div><div class="lbl">'+label[lang]+'</div>';
+      el.addEventListener('click', () => {
+        el.classList.toggle('done');
+        el.querySelector('.box').style.color = el.classList.contains('done') ? '#fff' : 'transparent';
+        updateProg();
+      });
+      pack.appendChild(el);
+    });
+    updateProg();
+  }
+  function updateProg(){
+    const done = document.querySelectorAll('.pk.done').length;
+    document.getElementById('progress').textContent = UI[lang].packProg(done, PACK.length);
+  }
 
   function renderPlan(planKey){
     currentPlan = planKey;
@@ -358,23 +408,23 @@
     document.querySelectorAll('.plan-card').forEach(c => c.classList.toggle('active', c.dataset.plan === planKey));
 
     document.getElementById('routeStrip').innerHTML = plan.strip.map(s =>
-      '<div class="leg"><div class="dnum">'+s[0]+'</div><div class="dname">'+s[1]+'</div></div>').join('');
+      '<div class="leg"><div class="dnum">'+s[lang][0]+'</div><div class="dname">'+s[lang][1]+'</div></div>').join('');
 
-    let mc = '<button class="map-btn all active" data-day="all">全部</button>';
-    plan.days.forEach(d => mc += '<button class="map-btn" data-day="'+d.d+'">'+plan.strip[d.d-1][0]+'</button>');
-    mc += '<label class="map-toggle"><input type="checkbox" id="routeToggle" checked> 顯示路線</label>';
+    let mc = '<button class="map-btn all active" data-day="all">'+UI[lang].all+'</button>';
+    plan.days.forEach(d => mc += '<button class="map-btn" data-day="'+d.d+'">'+plan.strip[d.d-1][lang][0]+'</button>');
+    mc += '<label class="map-toggle"><input type="checkbox" id="routeToggle" checked> '+UI[lang].showRoute+'</label>';
     document.getElementById('mapControls').innerHTML = mc;
 
-    const nowLabel = '<span class="now">'+plan.label+':</span>';
+    const nowLabel = '<span class="now">'+plan.label[lang]+':</span>';
     document.getElementById('tabs').innerHTML = nowLabel + plan.days.map((d,i) =>
-      '<button class="tab'+(i===0?' active':'')+'" data-day="'+d.d+'">'+plan.strip[d.d-1][0]+' · '+plan.strip[d.d-1][1]+'</button>').join('');
+      '<button class="tab'+(i===0?' active':'')+'" data-day="'+d.d+'">'+plan.strip[d.d-1][lang][0]+' · '+plan.strip[d.d-1][lang][1]+'</button>').join('');
 
     document.getElementById('dayPanels').innerHTML = plan.days.map((d,i) => {
-      const pills = d.pills.map(p => '<span class="pill '+p[0]+'">'+p[1]+'</span>').join('');
-      const tl = d.tl.map(r => '<div class="ti"><div class="t">'+r[0]+'</div><div class="dot"></div><div class="c"><div class="nm">'+r[1]+'</div>'+(r[2]?'<div class="nt">'+r[2]+'</div>':'')+'</div></div>').join('');
-      const note = d.note ? '<div class="note-box">'+d.note+'</div>' : '';
-      const badgeLabel = plan.strip[d.d-1][0];
-      return '<section class="day'+(i===0?' active':'')+'" data-day="'+d.d+'"><div class="day-header"><div class="day-badge"><span class="n">'+d.d+'</span><span class="l">'+badgeLabel+'</span></div><div><h2>'+d.title+' '+pills+'</h2><div class="meta">'+d.meta+'</div></div></div><div class="timeline">'+tl+'</div>'+note+'</section>';
+      const pills = d.pills.map(p => '<span class="pill '+p[0]+'">'+p[1][lang]+'</span>').join('');
+      const tl = d.tl.map(r => '<div class="ti"><div class="t">'+r[0]+'</div><div class="dot"></div><div class="c"><div class="nm">'+r[1][lang]+'</div>'+(r[2][lang]?'<div class="nt">'+r[2][lang]+'</div>':'')+'</div></div>').join('');
+      const note = d.note ? '<div class="note-box">'+d.note[lang]+'</div>' : '';
+      const badgeLabel = plan.strip[d.d-1][lang][0];
+      return '<section class="day'+(i===0?' active':'')+'" data-day="'+d.d+'"><div class="day-header"><div class="day-badge"><span class="n">'+d.d+'</span><span class="l">'+badgeLabel+'</span></div><div><h2>'+d.title[lang]+' '+pills+'</h2><div class="meta">'+d.meta[lang]+'</div></div></div><div class="timeline">'+tl+'</div>'+note+'</section>';
     }).join('');
 
     bindTabs();
@@ -405,38 +455,24 @@
       if (card) { renderPlan(card.dataset.plan); window.scrollTo({top:0, behavior:'smooth'}); }
     }));
 
-  const items = ["防水外套(每人)","保暖中層 / 抓毛","Walking boots","行山襪(備用)","背包 20–30L","飲用水 1.5–2L","行動糧 / 能量棒","防曬 + 太陽眼鏡","帽 / 頸巾","離線地圖 (OS Maps)","充電器 / 尿袋","小型急救包","頭燈(後備)","現金(細店 / 停車)"];
-  const pack = document.getElementById('pack');
-  const progress = document.getElementById('progress');
-  items.forEach((label) => {
-    const el = document.createElement('div');
-    el.className = 'pk';
-    el.innerHTML = '<div class="box" style="color:transparent">✓</div><div class="lbl">'+label+'</div>';
-    el.addEventListener('click', () => {
-      el.classList.toggle('done');
-      el.querySelector('.box').style.color = el.classList.contains('done') ? '#fff' : 'transparent';
-      const done = document.querySelectorAll('.pk.done').length;
-      progress.textContent = '已準備 ' + done + ' / ' + items.length + ' 項';
-    });
-    pack.appendChild(el);
+  document.querySelector('.lang-switch').addEventListener('click', e => {
+    const btn = e.target.closest('.lang-btn');
+    if (!btn) return;
+    lang = btn.dataset.lang;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+    renderStatic();
+    renderPlan(currentPlan);
   });
-
-  document.getElementById('actions').innerHTML =
-    '<a class="btn primary" href="https://www.google.com/maps/dir/Ambleside/Catbells/Old+Man+of+Coniston/Loughrigg+Fell" target="_blank">🗺️ Google Maps 路線</a>'+
-    '<a class="btn ghost" href="https://www.metoffice.gov.uk/weather/specialist-forecasts/mountain/lake-district" target="_blank">🌦️ 山區天氣預報</a>'+
-    '<a class="btn ghost" href="http://www.thegables-ambleside.co.uk/" target="_blank">🏠 住宿網站</a>'+
-    '<button class="btn ghost" onclick="window.print()">🖨️ 列印 / 存 PDF</button>';
 
   let map, markerLayer, routeLayer;
   if (typeof L === 'undefined') {
     document.getElementById('map').innerHTML =
       '<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;color:#7d8c83;background:#eef3ef;border-radius:16px;">'+
       '<div style="font-size:38px;margin-bottom:10px;">🗺️</div>'+
-      '<div style="font-weight:700;color:#2f4f3e;margin-bottom:6px;">地圖暫時載入唔到</div>'+
-      '<div style="font-size:13px;max-width:340px;margin-bottom:16px;">可能係網絡擋咗地圖元件。可以㩒下面個掣喺 Google Maps 睇路線。</div>'+
-      '<a href="https://www.google.com/maps/dir/Ambleside/Catbells/Old+Man+of+Coniston/Loughrigg+Fell" target="_blank" style="background:#2f4f3e;color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:11px 22px;border-radius:30px;">喺 Google Maps 開路線 →</a>'+
+      '<div style="font-weight:700;color:#2f4f3e;margin-bottom:6px;">Map unavailable / 地圖暫時載入唔到</div>'+
+      '<a href="https://www.google.com/maps/dir/Ambleside/Catbells/Old+Man+of+Coniston/Loughrigg+Fell" target="_blank" style="background:#2f4f3e;color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:11px 22px;border-radius:30px;margin-top:12px;">Open in Google Maps →</a>'+
       '</div>';
-    renderPlan('A');
+    renderStatic(); renderPlan('A');
   } else {
     map = L.map('map', { scrollWheelZoom:false }).setView([54.45,-3.03], 10);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom:18, subdomains:['a','b','c'], attribution:'© OpenStreetMap' }).addTo(map);
@@ -447,10 +483,11 @@
     window.renderMap = function(day){
       markerLayer.clearLayers(); routeLayer.clearLayers(); currentDay = day;
       const plan = PLANS[currentPlan];
-      function pinIcon(s){ return L.divIcon({ className:'', html:'<div class="map-pin '+(s.base?'base':'')+'"><span>'+s.label+'</span></div>', iconSize:[30,30], iconAnchor:[15,30], popupAnchor:[0,-30] }); }
+      function pinIcon(s){ const lbl = s.base ? (lang==='en'?'S':'住') : s.label; return L.divIcon({ className:'', html:'<div class="map-pin '+(s.base?'base':'')+'"><span>'+lbl+'</span></div>', iconSize:[30,30], iconAnchor:[15,30], popupAnchor:[0,-30] }); }
       function addStop(s){
         const m = L.marker([s.lat,s.lng], { icon: pinIcon(s) });
-        m.bindPopup('<div class="pop-d">'+(s.base?'BASE':'STOP '+s.label)+'</div><div class="pop-n">'+s.name+'</div><div class="pop-x">'+s.note+'</div>');
+        const dd = s.base ? 'BASE' : 'STOP '+s.label;
+        m.bindPopup('<div class="pop-d">'+dd+'</div><div class="pop-n">'+s.name[lang]+'</div><div class="pop-x">'+s.note[lang]+'</div>');
         m.addTo(markerLayer); return [s.lat,s.lng];
       }
       if (day === 'all'){
@@ -466,7 +503,7 @@
       document.querySelectorAll('.map-btn').forEach(b => b.classList.toggle('active', b.dataset.day === String(day)));
     };
 
-    renderPlan('A');
+    renderStatic(); renderPlan('A');
     setTimeout(() => { map.invalidateSize(); renderMap('all'); }, 200);
   }
 </script>
