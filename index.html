@@ -113,6 +113,19 @@
   footer { background:var(--moss); color:rgba(255,255,255,0.8); text-align:center; padding:30px 20px; margin-top:40px; font-size:13px; }
   footer .big { font-family:'Fraunces',serif; color:#fff; font-size:18px; margin-bottom:6px; }
 
+  .stay-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:14px; }
+  .stay { background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px 18px; transition:all .18s; }
+  .stay:hover { border-color:var(--sage); box-shadow:0 4px 16px rgba(47,79,62,0.07); }
+  .stay.featured { border:2px solid var(--sage); background:#f7faf8; }
+  .stay .s-top { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:6px; }
+  .stay .s-name { font-family:'Fraunces',serif; font-size:17px; font-weight:600; color:var(--moss); line-height:1.25; }
+  .stay .s-rating { background:var(--moss); color:#fff; font-size:12px; font-weight:700; padding:3px 9px; border-radius:20px; white-space:nowrap; flex-shrink:0; }
+  .stay .s-type { font-size:11px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; color:var(--sage); margin-bottom:8px; }
+  .stay .s-feat { font-size:13px; color:var(--ink); line-height:1.5; margin-bottom:10px; }
+  .stay .s-meta { display:flex; flex-wrap:wrap; gap:6px; }
+  .stay .s-tag { background:var(--mist); color:var(--moss-2); font-size:11.5px; padding:3px 9px; border-radius:6px; }
+  .stay .s-badge { display:inline-block; background:var(--sage); color:#fff; font-size:11px; font-weight:700; padding:2px 10px; border-radius:20px; margin-bottom:8px; }
+
   @media (max-width:560px){
     .timeline::before { left:52px; } .ti .dot { left:49px; } .ti .t { width:44px; font-size:13px;}
     .hero { padding:42px 0 36px; } #map { height:380px; } .map-toggle { margin-left:0; width:100%; margin-top:4px;}
@@ -197,6 +210,58 @@
     <div class="block">
       <h3>實用連結</h3>
       <div class="actions" id="actions"></div>
+    </div>
+
+    <div class="block">
+      <h3>住宿選擇</h3>
+      <p style="color:var(--sub);font-size:14px;margin:-8px 0 18px;">行程預設用 The Gables 做大本營,以下係 Ambleside 一帶嘅其他選擇,由不同價位 / 類型俾大家揀。全部位置都方便去南北兩區行山。</p>
+      <div class="stay-grid">
+
+        <div class="stay featured">
+          <span class="s-badge">★ 行程預設</span>
+          <div class="s-top"><div class="s-name">The Gables Guesthouse</div><div class="s-rating">★ 4.8</div></div>
+          <div class="s-type">B&B · 鎮中心</div>
+          <div class="s-feat">評分最高,鎮中心位置、有免費泊車,老闆 Rohan friendly,早餐好評。適合行山友。</div>
+          <div class="s-meta"><span class="s-tag">免費泊車</span><span class="s-tag">含早餐</span><span class="s-tag">+44 15394 33272</span></div>
+        </div>
+
+        <div class="stay">
+          <div class="s-top"><div class="s-name">Brantholme B&B</div><div class="s-rating">★ 4.6</div></div>
+          <div class="s-type">B&B · 有熱水浴池</div>
+          <div class="s-feat">寧靜、有花園同 hot tub,房大、view 靚,主人 Frank & Jo 好客。離鎮中心 5 分鐘步行。</div>
+          <div class="s-meta"><span class="s-tag">免費泊車</span><span class="s-tag">Hot tub</span><span class="s-tag">+44 15394 33974</span></div>
+        </div>
+
+        <div class="stay">
+          <div class="s-top"><div class="s-name">Ambleside Townhouse</div><div class="s-rating">★ 4.6</div></div>
+          <div class="s-type">B&B / 小酒店 · 鎮中心</div>
+          <div class="s-feat">性價比高、職員親切,早餐豐富。Lake Rd 位置方便。多人住過、評價穩定(近 300 評)。</div>
+          <div class="s-meta"><span class="s-tag">抵住</span><span class="s-tag">含早餐</span><span class="s-tag">+44 15394 33240</span></div>
+        </div>
+
+        <div class="stay">
+          <div class="s-top"><div class="s-name">The Waterhead Inn</div><div class="s-rating">★ 4.4</div></div>
+          <div class="s-type">湖邊 Inn / 酒店</div>
+          <div class="s-feat">就喺 Windermere 湖邊,好多房望湖景,樓下有 pub 同餐廳,出門就係遊船碼頭。離鎮中心約 20 分鐘步行。</div>
+          <div class="s-meta"><span class="s-tag">湖景</span><span class="s-tag">餐廳 / Pub</span><span class="s-tag">+44 15394 32566</span></div>
+        </div>
+
+        <div class="stay">
+          <div class="s-top"><div class="s-name">Skelwith Bridge Hotel</div><div class="s-rating">★ 4.4</div></div>
+          <div class="s-type">鄉郊酒店 · 有特色</div>
+          <div class="s-feat">喺 Ambleside 西面約 10 分鐘車程,環境清幽、有古樸風味,dog-friendly,行 Loughrigg / Langdale 更就腳。</div>
+          <div class="s-meta"><span class="s-tag">寧靜</span><span class="s-tag">近行山起點</span><span class="s-tag">+44 15394 32115</span></div>
+        </div>
+
+        <div class="stay">
+          <div class="s-top"><div class="s-name">YHA Ambleside</div><div class="s-rating">★ 4.5</div></div>
+          <div class="s-type">青年旅舍 · 最抵</div>
+          <div class="s-feat">預算之選,湖邊位置、view 一流,有平價餐廳同酒吧。可訂私人房(雙人 / 家庭房)。設施較簡樸但乾淨。</div>
+          <div class="s-meta"><span class="s-tag">最平</span><span class="s-tag">湖景</span><span class="s-tag">私人房可訂</span></div>
+        </div>
+
+      </div>
+      <p style="color:var(--sub);font-size:12.5px;margin-top:14px;">評分來自 Google Maps,僅供參考。7 月旺季建議盡早預訂。</p>
     </div>
   </div>
 
